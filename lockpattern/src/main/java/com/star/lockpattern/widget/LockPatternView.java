@@ -2,6 +2,7 @@ package com.star.lockpattern.widget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
@@ -62,16 +63,16 @@ public class LockPatternView extends View {
 	
 	public LockPatternView(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
-		this.init();
+		this.init(context,attrs);
 	}
 
 	/**
 	 * initialize
      */
-	private void init(){
+	private void init(Context context,AttributeSet attrs){
 		this.initCellSize();
 		this.init9Cells();
-		this.initPaints();
+		this.initPaints(context,attrs);
 		this.initPaths();
 		this.initMatrixs();
 	}
@@ -215,25 +216,32 @@ public class LockPatternView extends View {
 			}
 		}
 	}
-	
+	private int defaultColor;
+	private int selectColor;
+	private int errorColor;
 	/**
 	 * initialize paints
 	 */
-	private void initPaints(){
+	private void initPaints(Context context,AttributeSet attrs){
+		TypedArray ta = context.obtainStyledAttributes(attrs,R.styleable.LockPatternView);
+		defaultColor=ta.getColor(R.styleable.LockPatternView_defaultColor,getResources().getColor(R.color.blue_78d2f6));
+		selectColor=ta.getColor(R.styleable.LockPatternView_selectColor,getResources().getColor(R.color.blue_00aaee));
+		errorColor=ta.getColor(R.styleable.LockPatternView_errorColor,getResources().getColor(R.color.red_f3323b));
+		ta.recycle();
 		defaultPaint = new Paint();
-		defaultPaint.setColor(getResources().getColor(R.color.blue_78d2f6));
+		defaultPaint.setColor(defaultColor);
 		defaultPaint.setStrokeWidth(2.0f);
 		defaultPaint.setStyle(Style.STROKE);
 		defaultPaint.setAntiAlias(true);
 		
 		selectPaint = new Paint();
-		selectPaint.setColor(getResources().getColor(R.color.blue_00aaee));
+		selectPaint.setColor(selectColor);
 		selectPaint.setStrokeWidth(3.0f);
 		//selectPaint.setStyle(Style.STROKE);
 		selectPaint.setAntiAlias(true);
 		
 		errorPaint = new Paint();
-		errorPaint.setColor(getResources().getColor(R.color.red_f3323b));
+		errorPaint.setColor(errorColor);
 		errorPaint.setStrokeWidth(3.0f);
 		//errorPaint.setStyle(Style.STROKE);
 		errorPaint.setAntiAlias(true);
